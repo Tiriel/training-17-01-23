@@ -27,4 +27,16 @@ class MainController extends AbstractController
             'controller_name' => 'Contact',
         ]);
     }
+
+    public function decades(): Response
+    {
+        $decades = [
+            '1970',
+            '1980',
+        ];
+
+        return $this->render('_decades.html.twig', [
+            'decades' => $decades,
+        ])->setMaxAge('86400');
+    }
 }
