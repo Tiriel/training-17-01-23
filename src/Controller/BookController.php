@@ -19,8 +19,10 @@ class BookController extends AbstractController
      * @Route("", name="app_book_index", methods={"GET"})
      * @Route("/list", name="app_book_list", methods={"GET"})
      */
-    public function index(Request $request): Response
+    public function index(Request $request, BookRepository $repository): Response
     {
+        $books = $repository->findAll();
+
         $controllerName = 'BookController';
         if ('app_book_list' === $request->attributes->get('_route')) {
             $controllerName .= '::list';
@@ -28,6 +30,7 @@ class BookController extends AbstractController
 
         return $this->render('book/index.html.twig', [
             'controller_name' => $controllerName,
+            'books' => $books,
         ]);
     }
 
