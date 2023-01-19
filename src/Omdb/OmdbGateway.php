@@ -25,12 +25,12 @@ class OmdbGateway
         )->toArray();
 
         $movie = new Movie();
-        dump($movie, $apiResponse);
 
-        $movie->setTitle($apiResponse['Title']);
-        $movie->setReleasedAt(\DateTimeImmutable::createFromFormat(
+        $released = \DateTimeImmutable::createFromFormat(
             'd M Y', $apiResponse['Released']
-        ));
+        );
+        $movie->setTitle($apiResponse['Title']);
+        $movie->setReleasedAt($released ?: new \DateTimeImmutable());
         $movie->setPlot($apiResponse['Plot']);
         $movie->setCountry($apiResponse['Country']);
         $movie->setPoster($apiResponse['Poster']);

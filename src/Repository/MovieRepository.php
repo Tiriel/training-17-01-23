@@ -41,6 +41,15 @@ class MovieRepository extends ServiceEntityRepository
         }
     }
 
+    public function findEmptyPosterMovies(): array
+    {
+        return $this->createQueryBuilder('movie')
+            ->andWhere('movie.poster = NULL')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     public function findLikeTitle(string $title): array
     {
         //$rsm  = new ResultSetMappingBuilder($this->getEntityManager());

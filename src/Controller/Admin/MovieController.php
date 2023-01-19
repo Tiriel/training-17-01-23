@@ -88,3 +88,22 @@ class MovieController extends AbstractController
         return $this->redirectToRoute('app_admin_movie_index', [], Response::HTTP_SEE_OTHER);
     }
 }
+
+/**
+1. Create a command "app:movie:import" that will import movies from the API
+2. Add an argument to this command to search for a specific movie
+3. Inject the OmdbGateway in the command
+4. Use the OmdbGateway to fetch the movie by the title
+5. Persist the new Movie entity
+ * Bonus :
+6. If the argument is missing, ask the user to enter a title
+ */
+
+/**
+1. Create a command "app:movie:poster-retrieve" that will retrieve the poster of a movie
+2. Inject the OmdbGateway and MovieRepository in the command
+3. For each movie that is missing a poster, retrieve the poster from the API
+4. Persist the movie
+ * Bonus :
+5. Show the progress bar
+ */
