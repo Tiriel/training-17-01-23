@@ -2,7 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Movie;
+use App\Omdb\OmdbGateway;
 use App\Repository\MovieRepository;
+use DateTime;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -12,6 +16,14 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class MovieController extends AbstractController
 {
+    private OmdbGateway $omdbGateway;
+
+    public function __construct(
+        OmdbGateway $omdbGateway,
+    ){
+        $this->omdbGateway = $omdbGateway;
+    }
+
     /**
      * @Route("", name="app_movie_index")
      */
@@ -28,12 +40,12 @@ class MovieController extends AbstractController
     /**
      * @Route("/{id}", name="app_movie_details", requirements={"id": "\d+"})
      */
-    public function details(int $id, MovieRepository $repository): Response
+    public function details(Movie $movie): Response
     {
-        $movie = $repository->find($id);
+        $movieFromApi = $this->omdbGateway->fetchMovie($movie->getTitle());
 
         return $this->render('movie/details.html.twig', [
-            'movie' => $movie,
+            'movie' => $movieFromApi,
         ]);
     }
 

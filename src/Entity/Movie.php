@@ -18,37 +18,37 @@ class Movie
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $title;
+    private string $title;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $poster;
+    private string $poster;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $country;
+    private string $country;
 
     /**
      * @ORM\Column(type="datetime_immutable")
      */
-    private $releasedAt;
+    private \DateTimeInterface $releasedAt;
 
     /**
      * @ORM\Column(type="text")
      */
-    private $plot;
+    private string $plot;
 
     /**
      * @ORM\ManyToMany(targetEntity=Genre::class, inversedBy="movies")
      */
-    private $genres;
+    private Collection $genres;
 
     public function __construct()
     {
@@ -96,12 +96,12 @@ class Movie
         return $this;
     }
 
-    public function getReleasedAt(): ?\DateTimeImmutable
+    public function getReleasedAt(): ?\DateTimeInterface
     {
         return $this->releasedAt;
     }
 
-    public function setReleasedAt(\DateTimeImmutable $releasedAt): self
+    public function setReleasedAt(\DateTimeInterface $releasedAt): self
     {
         $this->releasedAt = $releasedAt;
 

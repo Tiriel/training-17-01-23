@@ -9,24 +9,23 @@
 
 {% block body %}
 <div class="example-wrapper">
-    {% if movie is not null %}
-        <h1>{{ movie.title }}</h1>
+    <img src="{{ movie.poster }}" alt="{{ movie.poster }}" />
+    <h1>{{ movie.title }}</h1>
 
-    {#    {% for key,value in movie %}#}
-    {#        {% if value.timestamp is defined %}#}
-    {#            {% set value = value|date('d M Y') %}#}
-    {#        {% elseif value is iterable %}#}
-    {#            {% set value = value|join(', ') %}#}
-    {#        {% endif %}#}
-    {#        <li>{{ key }} : {{ value }}</li>#}
-    {#    {% endfor %}#}
+{#    {% for key,value in movie %}#}
+{#        {% if value.timestamp is defined %}#}
+{#            {% set value = value|date('d M Y') %}#}
+{#        {% elseif value is iterable %}#}
+{#            {% set value = value|join(', ') %}#}
+{#        {% endif %}#}
+{#        <li>{{ key }} : {{ value }}</li>#}
+{#    {% endfor %}#}
 
-        <li>Id : {{ movie.id }}</li>
-        <li>Country : {{ movie.country }}</li>
-        <li>Released : {{ movie.releasedAt|date('d M Y') }}</li>
+    <li>Id : {{ movie.id }}</li>
+    <li>Country : {{ movie.country }}</li>
+    <li>Released : {{ movie.releasedAt|date('d M Y') }}</li>
+    <li>Description : {{ movie.plot }}</li>
 {#        <li>Genre : {{ movie.genre|join(', ') }}</li>#}
-    {% else %}
-        <h1>Movie not found.</h1>
-    {% endif %}
+
 </div>
 {% endblock %}

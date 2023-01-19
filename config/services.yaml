@@ -5,11 +5,18 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
 
+
+# UX : User Experience (Est-ce que l'utilisateur passe un bon moment en utilisant l'application ?)
+# DX : Developer Experience (Est-ce que le développeur passe un bon moment en utilisant le framework ?)
+
 services:
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+#        bind:
+#            string $smtpHost: "%env(SMTP_HOST)%"
+#            string $logPath: "/var/log/app.log"
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name

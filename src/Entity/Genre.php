@@ -17,22 +17,22 @@ class Genre
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private string $name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $poster;
+    private ?string $poster;
 
     /**
      * @ORM\ManyToMany(targetEntity=Movie::class, mappedBy="genres")
      */
-    private $movies;
+    private Collection $movies;
 
     public function __construct()
     {
