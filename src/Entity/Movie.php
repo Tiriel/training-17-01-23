@@ -50,6 +50,27 @@ class Movie
      */
     private Collection $genres;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="moviesCreated")
+     */
+    private ?User $createdBy = null;
+
+    /**
+     * @return User
+     */
+    public function getCreatedBy(): ?User
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * @param User $createdBy
+     */
+    public function setCreatedBy(User $createdBy): void
+    {
+        $this->createdBy = $createdBy;
+    }
+
     public function __construct()
     {
         $this->genres = new ArrayCollection();

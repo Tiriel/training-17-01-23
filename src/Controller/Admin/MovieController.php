@@ -5,12 +5,14 @@ namespace App\Controller\Admin;
 use App\Entity\Movie;
 use App\Form\MovieType;
 use App\Repository\MovieRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
+ * @IsGranted("ROLE_ADMIN")
  * @Route("/admin/movie")
  */
 class MovieController extends AbstractController
@@ -26,6 +28,7 @@ class MovieController extends AbstractController
     }
 
     /**
+     *
      * @Route("/new", name="app_admin_movie_new", methods={"GET", "POST"})
      */
     public function new(Request $request, MovieRepository $movieRepository): Response
@@ -35,6 +38,7 @@ class MovieController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $movie->setCreatedBy($this->getUser());
             $movieRepository->add($movie, true);
 
             return $this->redirectToRoute('app_admin_movie_index', [], Response::HTTP_SEE_OTHER);
@@ -57,6 +61,7 @@ class MovieController extends AbstractController
     }
 
     /**
+     * @IsGranted("EDIT", subject="movie")
      * @Route("/{id}/edit", name="app_admin_movie_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Movie $movie, MovieRepository $movieRepository): Response
@@ -87,23 +92,25 @@ class MovieController extends AbstractController
 
         return $this->redirectToRoute('app_admin_movie_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    public function createProduct()
+    {
+
+        $form = $this->createForm(ProductType::class);
+
+        if($form->isSubmitted()) {
+            $product = $form->getData();
+            $entityManager->persist($product);
+
+            $this->eventDispatcher->dispatch(new ProductCreatedEvent($product));
+        }
+    }
 }
 
-/**
-1. Create a command "app:movie:import" that will import movies from the API
-2. Add an argument to this command to search for a specific movie
-3. Inject the OmdbGateway in the command
-4. Use the OmdbGateway to fetch the movie by the title
-5. Persist the new Movie entity
- * Bonus :
-6. If the argument is missing, ask the user to enter a title
- */
-
-/**
-1. Create a command "app:movie:poster-retrieve" that will retrieve the poster of a movie
-2. Inject the OmdbGateway and MovieRepository in the command
-3. For each movie that is missing a poster, retrieve the poster from the API
-4. Persist the movie
- * Bonus :
-5. Show the progress bar
+/*
+ * Pas plus de 5 classes par namespace
+ * Pas plus de 5 méthodes publique par classe
+ * Pas plus de 30 lignes de code par méthode
+ * Pas plus de 5 paramètres par méthode
+ * Pas plus de 2 niveaux d'imbrication
  */
