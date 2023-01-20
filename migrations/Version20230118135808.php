@@ -14,7 +14,7 @@ final class Version20230118135808 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return '';
+        return 'Create Genre entity (for movies).';
     }
 
     public function up(Schema $schema): void
