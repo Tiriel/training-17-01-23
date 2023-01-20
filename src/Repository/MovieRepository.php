@@ -44,7 +44,7 @@ class MovieRepository extends ServiceEntityRepository
     public function findEmptyPosterMovies(): array
     {
         return $this->createQueryBuilder('movie')
-            ->andWhere('movie.poster = NULL')
+            ->andWhere('movie.poster = \'\'')
             ->getQuery()
             ->getResult()
         ;

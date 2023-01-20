@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Omdb\OmdbGateway;
 use App\Repository\MovieRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -20,11 +21,17 @@ class MoviePosterRetrieveCommand extends Command
 {
     private OmdbGateway $omdbGateway;
     private MovieRepository $movieRepository;
+    private EntityManagerInterface $entityManager;
 
-    public function __construct(OmdbGateway $omdbGateway, MovieRepository $movieRepository)
+    public function __construct(
+        OmdbGateway $omdbGateway,
+        MovieRepository $movieRepository,
+        EntityManagerInterface $entityManager
+    )
     {
         $this->omdbGateway = $omdbGateway;
         $this->movieRepository = $movieRepository;
+        $this->entityManager = $entityManager;
 
         parent::__construct();
     }
@@ -34,9 +41,27 @@ class MoviePosterRetrieveCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $noPosterMovies = $this->movieRepository->findEmptyPosterMovies();
 
-        foreach($noPosterMovies as $movie) {
-            
+        if($io->isVerbose()) {
+            $io->note(sprintf('Il y a %d films sans poster', count($noPosterMovies)));
         }
+
+        $numberOfUpdates = 0;
+        foreach($noPosterMovies as $persistedMovie) {
+            try {
+                $apiMovie = $this->omdbGateway->fetchMovie($persistedMovie->getTitle());
+                if(!empty($apiMovie->getPoster())) {
+                    $persistedMovie->setPoster($apiMovie->getPoster());
+                    $this->entityManager->persist($persistedMovie);
+                    $numberOfUpdates++;
+                }
+            } catch(\Throwable $e) {
+                if($io->isVeryVerbose()) {
+                    $io->error($e->getMessage());
+                }
+            }
+        }
+
+        $this->entityManager->flush();
 
         $io->success(sprintf('%d fiches ont été mises à jour.', $numberOfUpdates));
 
